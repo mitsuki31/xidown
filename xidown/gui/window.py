@@ -486,7 +486,7 @@ class BaseLayout(ctk.CTk):
         self.btn_clear = ctk.CTkButton(frame_btn, text="Clear", height=32, fg_color="#2b2b2b", hover_color="#3a3a3a", font=("Terminal", 13), width=50, corner_radius=0)
         self.btn_clear.grid(row=0, column=2, sticky="ew", padx=(4, 0))
 
-        self.box_link = ctk.CTkTextbox(self.inner_kiri, font=("Terminal", 12), fg_color="#1a1a1a", text_color="#eeeeee", corner_radius=0, border_width=1, border_color="#2c2c2c", scrollbar_button_color="#333333", scrollbar_button_hover_color="#db2777")
+        self.box_link = ctk.CTkTextbox(self.inner_kiri, font=("Consolas", 11), fg_color="#1a1a1a", text_color="#eeeeee", corner_radius=0, border_width=1, border_color="#2c2c2c", scrollbar_button_color="#333333", scrollbar_button_hover_color="#db2777")
         self.box_link.pack(side="top", fill="both", expand=True, pady=(5, 0))
         try: self.box_link._scrollbar.configure(width=4)
         except: pass
@@ -508,7 +508,7 @@ class BaseLayout(ctk.CTk):
         row1.pack(side="top", fill="x", pady=0)
         ctk.CTkLabel(row1, text="Scan Results", font=("Terminal", 18, "bold"), text_color="#eeeeee").pack(side="left", padx=5, pady=0)
         
-        btn_style = {"width": 24, "height": 24, "fg_color": "transparent", "hover_color": "#333333", "text": ""}
+        btn_style = {"width": 24, "height": 24, "fg_color": "transparent", "hover_color": "#333333", "text": "", "corner_radius": 0}
         self.btn_settings = ctk.CTkButton(row1, image=self.ic_settings, **btn_style); self.btn_settings.pack(side="right", padx=0)
         self.btn_notes = ctk.CTkButton(row1, image=self.ic_notes, **btn_style); self.btn_notes.pack(side="right", padx=2) 
         self.btn_open_folder = ctk.CTkButton(row1, image=self.ic_folder, state="disabled", **btn_style); self.btn_open_folder.pack(side="right", padx=2)

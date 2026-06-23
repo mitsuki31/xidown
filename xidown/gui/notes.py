@@ -27,13 +27,13 @@ OLD_NOTES_FILE = os.path.join(DATA_DIR, "user_notes.txt")
 # CUSTOM WIDGET: NOTE CARD
 class NoteCard(ctk.CTkFrame):
     def __init__(self, parent, note_id, data, is_selected, callback_select):
-        self.default_bg = "#2b2b2b" if not is_selected else "#db2777"
-        self.hover_bg = "#3a3a3a" if not is_selected else "#be185d"
-        self.text_color = "#dddddd" if not is_selected else "#ffffff"
+        self.default_bg = "#121212" if is_selected else "transparent"
+        self.hover_bg = "#222222" if is_selected else "#1e1e1e"
+        self.text_color = "#db2777" if is_selected else "#aaaaaa"
         
         super().__init__(parent, fg_color=self.default_bg, corner_radius=0, height=36)
-        self.pack(fill="x", pady=2, padx=0)
-        self.grid_propagate(False) 
+        self.pack(fill="x", pady=1, padx=4)
+        self.pack_propagate(False) 
         
         self.note_id = note_id
         self.callback_select = callback_select
@@ -51,20 +51,24 @@ class NoteCard(ctk.CTkFrame):
         if len(display_text) > 25: 
             display_text = display_text[:22] + "..."
 
+        # Left active indicator bar
+        indicator_color = "#db2777" if is_selected else "transparent"
+        self.indicator = ctk.CTkFrame(self, width=3, fg_color=indicator_color, corner_radius=0)
+        self.indicator.pack(side="left", fill="y")
+
         self.lbl_title = ctk.CTkLabel(
             self, text=display_text, font=("Terminal", 11, "bold"), 
             text_color=self.text_color, anchor="w"
         )
-        self.lbl_title.place(relx=0.05, rely=0.5, anchor="w", relwidth=0.9)
+        self.lbl_title.pack(side="left", fill="both", expand=True, padx=(8, 4))
 
-        for w in [self, self.lbl_title]:
+        for w in [self, self.lbl_title, self.indicator]:
             w.bind("<Button-1>", self.on_click)
             w.bind("<Enter>", self.on_enter)
             w.bind("<Leave>", self.on_leave)
 
     def on_enter(self, event):
-        if self.default_bg != "#db2777": 
-            self.configure(fg_color=self.hover_bg)
+        self.configure(fg_color=self.hover_bg)
 
     def on_leave(self, event):
         self.configure(fg_color=self.default_bg)
@@ -81,18 +85,19 @@ class NotesWindow(ctk.CTkToplevel):
         
         self.title("My Notes")
         self.parent = parent
+        self.configure(fg_color="#121212")
         
         try:
             parent.update_idletasks()
             p_w = parent.winfo_width(); p_h = parent.winfo_height()
             p_x = parent.winfo_x(); p_y = parent.winfo_y()
-            w = int(p_w * 0.60); h = int(p_h * 0.60)
-            if w < 400: w = 400
-            if h < 280: h = 280
+            w = int(p_w * 0.65); h = int(p_h * 0.70)
+            if w < 500: w = 500
+            if h < 320: h = 320
             x = int(p_x + (p_w - w) / 2)
             y = int(p_y + (p_h - h) / 2)
         except:
-            w, h = 450, 300
+            w, h = 550, 350
             ws = self.winfo_screenwidth(); hs = self.winfo_screenheight()
             x = (ws // 2) - (w // 2); y = (hs // 2) - (h // 2)
 
@@ -105,8 +110,13 @@ class NotesWindow(ctk.CTkToplevel):
         # Load icon (Check assets, fallback to img)
         import xidown.core.utils as utils
         self.icon_path = utils.get_icon_path()
-
-        self.after(200, lambda: self.iconbitmap(self.icon_path) if self.icon_path and os.path.exists(self.icon_path) else None)
+        def force_icon():
+            try:
+                if self.icon_path and os.path.exists(self.icon_path): self.iconbitmap(self.icon_path)
+            except Exception: pass
+        force_icon()
+        self.after(200, force_icon)
+        self.after(1000, force_icon)
 
         # Data Init
         self.notes_data = {} 
@@ -120,26 +130,37 @@ class NotesWindow(ctk.CTkToplevel):
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
-        self.frame_sidebar = ctk.CTkFrame(self, width=150, corner_radius=0, fg_color="#2b2b2b")
+        self.frame_sidebar = ctk.CTkFrame(self, width=160, corner_radius=0, fg_color="#1a1a1a")
         self.frame_sidebar.grid(row=0, column=0, sticky="nsew")
         self.frame_sidebar.grid_propagate(False) 
 
+        # Header Title in Sidebar (matches main window style)
+        self.frame_sidebar_header = ctk.CTkFrame(self.frame_sidebar, fg_color="transparent", height=40)
+        self.frame_sidebar_header.pack(side="top", fill="x", padx=10, pady=(12, 0))
+        self.frame_sidebar_header.pack_propagate(False)
+        
+        self.lbl_sidebar_title = ctk.CTkLabel(self.frame_sidebar_header, text="NOTES", font=("Fixedsys", 16), text_color="#db2777")
+        self.lbl_sidebar_title.pack(side="top", anchor="w", pady=(2, 0))
+
         self.btn_new = ctk.CTkButton(
             self.frame_sidebar, text="+ New Note", fg_color="#db2777", hover_color="#be185d",     
-            text_color="white", font=("Terminal", 11, "bold"), height=26, corner_radius=0, command=self.action_add_note
+            text_color="white", font=("Terminal", 11, "bold"), height=28, corner_radius=0, command=self.action_add_note
         )
-        self.btn_new.pack(fill="x", padx=8, pady=(12, 8))
+        self.btn_new.pack(fill="x", padx=10, pady=(5, 8))
 
-        self.scroll_list = ctk.CTkScrollableFrame(self.frame_sidebar, fg_color="transparent")
-        self.scroll_list.pack(fill="both", expand=True, padx=4, pady=4)
+        self.scroll_list = ctk.CTkScrollableFrame(
+            self.frame_sidebar, fg_color="transparent", corner_radius=0,
+            scrollbar_button_color="#333333", scrollbar_button_hover_color="#db2777"
+        )
+        self.scroll_list.pack(fill="both", expand=True, padx=2, pady=(0, 5))
 
-        self.frame_editor = ctk.CTkFrame(self, corner_radius=0, fg_color="#1a1a1a")
+        self.frame_editor = ctk.CTkFrame(self, corner_radius=0, fg_color="#121212")
         self.frame_editor.grid(row=0, column=1, sticky="nsew")
         self.editor_widgets_active = False
         
-        self.frame_header_top = ctk.CTkFrame(self.frame_editor, fg_color="transparent", height=28)
-        self.lbl_date = ctk.CTkLabel(self.frame_header_top, text="", font=("Terminal", 10, "italic"), text_color="gray")
-        self.lbl_date.pack(side="left", padx=0)
+        self.frame_header_top = ctk.CTkFrame(self.frame_editor, fg_color="transparent", height=32)
+        self.lbl_date = ctk.CTkLabel(self.frame_header_top, text="", font=("Consolas", 10, "italic"), text_color="#888888")
+        self.lbl_date.pack(side="left", padx=5)
         
         try:
             ic_del = self.parent.ic_delete
@@ -149,14 +170,15 @@ class NotesWindow(ctk.CTkToplevel):
             text_del = "Del"
 
         self.btn_delete = ctk.CTkButton(
-            self.frame_header_top, text=text_del, image=ic_del, fg_color="#333", hover_color="#c0392b", 
-            font=("Terminal", 12, "bold"), width=30, height=24, command=self.action_delete_note
+            self.frame_header_top, text=text_del, image=ic_del, fg_color="#2b2b2b", hover_color="#8B0000", 
+            text_color="#777777", font=("Terminal", 10, "bold"), width=28, height=28, corner_radius=0, command=self.action_delete_note
         )
-        self.btn_delete.pack(side="right", padx=0)
+        self.btn_delete.pack(side="right", padx=5)
 
         self.textbox_isi = ctk.CTkTextbox(
-            self.frame_editor, font=("Terminal", 11), text_color="#eeeeee", 
-            fg_color="#1a1a1a", border_width=0, undo=True
+            self.frame_editor, font=("Consolas", 11), text_color="#eeeeee", 
+            fg_color="#1a1a1a", border_width=1, border_color="#2c2c2c", corner_radius=0,
+            scrollbar_button_color="#333333", scrollbar_button_hover_color="#db2777", undo=True
         )
         self.textbox_isi.bind("<KeyRelease>", self.action_save_content)
 

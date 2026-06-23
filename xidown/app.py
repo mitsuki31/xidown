@@ -21,6 +21,8 @@ else:
 # 3. Define BASE_DIR
 BASE_DIR = ROOT_DIR
 
+sys.path.insert(0, ROOT_DIR)
+
 # IMPORTS
 import customtkinter as ctk
 from flask import Flask, request, jsonify
@@ -247,7 +249,7 @@ class CyreneApp(BaseLayout):
         super().setup_right_ui()
         try:
             row1 = self.head_kanan.winfo_children()[0]
-            btn_style = {"width": 28, "height": 24, "fg_color": "transparent", "hover_color": "#333333", "font": ("Segoe UI Emoji", 16), "text_color": "#e0e0e0"}
+            btn_style = {"width": 28, "height": 24, "fg_color": "transparent", "hover_color": "#333333", "font": ("Segoe UI Emoji", 16), "text_color": "#e0e0e0", "corner_radius": 0}
             self.btn_forward = ctk.CTkButton(row1, text="↷", state="disabled", **btn_style)
             self.btn_forward.pack(side="right", padx=0)
             self.btn_back = ctk.CTkButton(row1, text="↶", state="disabled", **btn_style)
