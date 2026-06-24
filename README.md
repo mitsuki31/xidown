@@ -2,7 +2,7 @@
 
 xidown is a powerful, cross-platform GUI-based video and audio downloading application built with Python. Designed with an aesthetic dark-themed UI (CustomTkinter), xidown enables users to effortlessly scan, preview, and download media using `yt-dlp` and `ffmpeg`.
 
-![xidown Interface](screenshot.png)
+![xidown Interface](xidownv0.2513.png)
 
 ## Features
 

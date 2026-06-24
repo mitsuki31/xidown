@@ -63,6 +63,8 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
+          name: xidown ${{ github.ref_name }}
+          generate_release_notes: true
           files: release-files/*.zip
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

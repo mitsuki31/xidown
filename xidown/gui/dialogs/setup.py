@@ -121,13 +121,13 @@ class SetupBinariesPopup(ctk.CTkToplevel):
             self.update_ui_state("Step 1/3: yt-dlp.exe already present.", 0.33, "")
 
         # ----------------------------------------------------
-        # Step 2: Download ffmpeg-release-essentials.zip
+        # Step 2: Download ffmpeg package
         # ----------------------------------------------------
         path_ffmpeg_exe = os.path.join(bin_dir, "ffmpeg.exe")
         if not os.path.exists(path_ffmpeg_exe):
             self.update_ui_state("Step 2/3: Downloading ffmpeg package...", 0.33, "")
             
-            ffmpeg_url = "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip"
+            ffmpeg_url = "https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-win64-gpl.zip"
             
             def ffmpeg_progress(percent, downloaded, total):
                 mb_downloaded = downloaded / (1024 * 1024)
