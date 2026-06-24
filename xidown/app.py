@@ -716,6 +716,9 @@ class CyreneApp(BaseLayout):
         selected_items = [d for d in self.scan_data if d.get('selected', False)]
         if not selected_items: return self.update_dashboard("Select video first!", 0)
         
+        selected_items = [d for d in selected_items if not ("Done" in d.get('last_status', '') or "100%" in d.get('last_status', ''))]
+        if not selected_items: return self.update_dashboard("Selected items already downloaded.", 0)
+        
         self.check_subtitle_then_continue(selected_items, lambda subs: self.continue_download(selected_items, subs))
 
     def continue_download(self, selected_items, sub_langs):
@@ -749,6 +752,10 @@ class CyreneApp(BaseLayout):
 
     def action_download_one_item(self, widget_target):
         item_data = widget_target.data
+        status = item_data.get('last_status', '')
+        if "Done" in status or "100%" in status:
+            self.update_dashboard("Item already downloaded.", 0)
+            return
         self.check_subtitle_then_continue([item_data], lambda subs: self.continue_download_satu_item(item_data, subs))
 
     def continue_download_satu_item(self, item_data, sub_langs):
