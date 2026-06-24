@@ -36,9 +36,24 @@ xidown is a powerful, cross-platform GUI-based video and audio downloading appli
     brew install ffmpeg yt-dlp
     ```
 
-## Installation
+## Installation & Setup
 
-xidown is now structured as a standard Python package. You can install it globally on your system.
+You can either download the pre-built standalone binaries or set up the project from source.
+
+### Option 1: Standalone Release (Recommended for Users)
+
+Download the latest pre-compiled package for your OS (Windows, Linux, macOS) from the [Releases](https://github.com/indravoyager/xidown/releases) page.
+
+1. Download and extract the `.zip` file for your platform.
+2. Run the executable:
+   - **Windows:** Double-click `xidown.exe` or run `xidown.exe` in CMD/PowerShell. *(Note: On Windows, xidown will automatically prompt to download and place `ffmpeg.exe` and `yt-dlp.exe` in the local `bin/` directory if they are not in your system PATH).*
+   - **Linux / macOS:** Open a terminal, make it executable (`chmod +x xidown`), and run `./xidown`. *(Note: You must have `ffmpeg` and `yt-dlp` installed on your system).*
+
+---
+
+### Option 2: Installation from Source (For Developers)
+
+xidown is structured as a standard Python package. It is recommended to install it inside a Python virtual environment to keep dependencies isolated.
 
 1. **Clone the repository:**
    ```bash
@@ -46,11 +61,30 @@ xidown is now structured as a standard Python package. You can install it global
    cd xidown
    ```
 
-2. **Install the package:**
+2. **Create a Python virtual environment:**
+   ```bash
+   python -m venv venv
+   ```
+
+3. **Activate the virtual environment:**
+   - **Windows (Command Prompt):**
+     ```cmd
+     venv\Scripts\activate.bat
+     ```
+   - **Windows (PowerShell):**
+     ```powershell
+     venv\Scripts\Activate.ps1
+     ```
+   - **Linux / macOS:**
+     ```bash
+     source venv/bin/activate
+     ```
+
+4. **Install the package in editable mode:**
    ```bash
    pip install -e .
    ```
-   *(This automatically installs dependencies like `customtkinter`, `Flask`, `flask-cors`, and `Pillow`).*
+   *(This automatically installs core dependencies like `customtkinter`, `Flask`, `flask-cors`, and `Pillow` inside the active environment).*
 
 ## Browser Extension Setup
 
