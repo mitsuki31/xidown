@@ -1,4 +1,3 @@
-import os
 import sys
 import zipfile
 from urllib import request
@@ -77,45 +76,45 @@ def extract_ffmpeg_binaries(zip_path: str, bin_dir: Optional[Union[str, Path]] =
                 if extracted_members['ffmpeg'] and extracted_members['ffprobe']:
                     break
 
-        # If the ffmpeg binary file does not exist, then also for ffprobe is not exist
-        if not extracted_members['ffmpeg']:
-            print("[SetupBinaries] ffmpeg.exe not found in zip archive.", file=sys.stderr)
-            return False
-
-        # Extract to temporary directory and move to bin_dir
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmpdir_p = Path(tmpdir)
-            if cancel_event and cancel_event.is_set():
+            # If the ffmpeg binary file does not exist, then also for ffprobe is not exist
+            if not extracted_members['ffmpeg']:
+                print("[SetupBinaries] ffmpeg.exe not found in zip archive.", file=sys.stderr)
                 return False
 
-            # Extract ffmpeg.exe
-            zip_ref.extract(extracted_members['ffmpeg'], tmpdir)
-            extracted_path = tmpdir_p / extracted_members['ffmpeg']
-            dest_path = bin_dir / "ffmpeg.exe"
+            # Extract to temporary directory and move to bin_dir
+            with tempfile.TemporaryDirectory() as tmpdir:
+                tmpdir_p = Path(tmpdir)
+                if cancel_event and cancel_event.is_set():
+                    return False
 
-            if not bin_dir.exists():
-                bin_dir.mkdir(parents=True)
+                # Extract ffmpeg.exe
+                zip_ref.extract(extracted_members['ffmpeg'], tmpdir)
+                extracted_path = tmpdir_p / extracted_members['ffmpeg']
+                dest_path = bin_dir / "ffmpeg.exe"
 
-            # Remove any existing ffmpeg file
-            if dest_path.exists():
-                safe_rm(dest_path)
+                if not bin_dir.exists():
+                    bin_dir.mkdir(parents=True)
 
-            shutil.move(extracted_path, dest_path)
+                # Remove any existing ffmpeg file
+                if dest_path.exists():
+                    safe_rm(dest_path)
 
-            # Extract ffprobe.exe if available
-            ffprobe_path = extracted_members['ffprobe']
-            if ffprobe_path:
-                zip_ref.extract(ffprobe_path, tmpdir)
-                extracted_probe_path = tmpdir_p / ffprobe_path
-                dest_probe_path = bin_dir / "ffprobe.exe"
+                shutil.move(extracted_path, dest_path)
 
-                if dest_probe_path.exists():
-                    safe_rm(dest_probe_path)
+                # Extract ffprobe.exe if available
+                ffprobe_path = extracted_members['ffprobe']
+                if ffprobe_path:
+                    zip_ref.extract(ffprobe_path, tmpdir)
+                    extracted_probe_path = tmpdir_p / ffprobe_path
+                    dest_probe_path = bin_dir / "ffprobe.exe"
 
-                shutil.move(extracted_probe_path, dest_probe_path)
+                    if dest_probe_path.exists():
+                        safe_rm(dest_probe_path)
 
-            # Python <3.11 support, remove the temp directory manually
-            safe_rmdir(tmpdir)
+                    shutil.move(extracted_probe_path, dest_probe_path)
+
+                # Python <3.11 support, remove the temp directory manually
+                safe_rmdir(tmpdir)
         return True
     except Exception as e:
         print(f"[SetupBinaries] Error extracting ffmpeg: {e}", file=sys.stderr)
