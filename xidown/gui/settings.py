@@ -158,13 +158,19 @@ class SettingsWindow(ctk.CTkToplevel):
         ctk.CTkLabel(self.page_about, text=APP_NAME, font=("Terminal", 24, "bold"), text_color="#db2777").pack(pady=(25, 0))
         ctk.CTkLabel(self.page_about, text=APP_VER, font=("Terminal", 12, "bold"), text_color="gray").pack(pady=0)
         
-        dev = ctk.CTkFrame(self.page_about, fg_color="transparent")
-        dev.pack(pady=20)
-        ctk.CTkLabel(dev, text="Dev: ", font=("Terminal", 11, "bold")).grid(row=0,column=0)
-        l = ctk.CTkLabel(dev, text="Indra Voyager", font=("Terminal", 11, "underline", "bold"), text_color="#61afef", cursor="hand2")
-        l.grid(row=0,column=1)
+        # Dev row (packed side-by-side to stay close)
+        dev_row = ctk.CTkFrame(self.page_about, fg_color="transparent")
+        dev_row.pack(pady=(20, 5))
+        ctk.CTkLabel(dev_row, text="Dev: ", font=("Terminal", 11, "bold")).pack(side="left")
+        l = ctk.CTkLabel(dev_row, text="Indra Voyager", font=("Terminal", 11, "underline", "bold"), text_color="#61afef", cursor="hand2")
+        l.pack(side="left")
         l.bind("<Button-1>", lambda e: webbrowser.open("https://github.com/IndraVoyager"))
-        ctk.CTkLabel(dev, text="\nPartner: Cyrene, Merry", font=("Terminal", 11, "bold", "italic"), text_color="#db2777").grid(row=1,column=0, columnspan=2)
+
+        # Contributors row (names placed below the title)
+        contrib_frame = ctk.CTkFrame(self.page_about, fg_color="transparent")
+        contrib_frame.pack(pady=(10, 20))
+        ctk.CTkLabel(contrib_frame, text="Contributors:", font=("Terminal", 11, "bold"), text_color="white").pack()
+        ctk.CTkLabel(contrib_frame, text="cyrene, merry, mitsuki31", font=("Terminal", 11, "bold"), text_color="white").pack()
 
     def show_about(self): self.set_active(self.btn_about); self.page_about.pack(fill="both", expand=True)
 

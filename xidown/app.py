@@ -202,7 +202,7 @@ class CyreneApp(BaseLayout):
             try: splash.attributes("-transparentcolor", transparent_color)
             except Exception as e: print(f"Error: {e}")
 
-        # Premium rounded border for splash screen
+        # Border for splash screen
         card_frame = ctk.CTkFrame(splash, fg_color="#121212", corner_radius=0, border_width=1, border_color="#333333")
         card_frame.pack(fill="both", expand=True, padx=2, pady=2)
 
@@ -395,7 +395,7 @@ class CyreneApp(BaseLayout):
 
     # --- Widget & List Management ---
     def add_one_widget(self, data_item):
-        current_format_mode = "mp3" if "🎵" in self.var_format.get() else "mp4"
+        current_format_mode = "mp3" if "Audio" in self.var_format.get() or "🎵" in self.var_format.get() else "mp4"
         card = ThumbnailCard(
             self.scroll_frame, 
             data_item, 

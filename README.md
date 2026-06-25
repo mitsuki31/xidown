@@ -2,16 +2,15 @@
 
 xidown is a powerful, cross-platform GUI-based video and audio downloader built with Python. Designed with a premium, dark-themed CustomTkinter UI, xidown lets you effortlessly scan, queue, and download media using `yt-dlp` and `ffmpeg`.
 
-![xidown Interface](xidownv0.2513.png)
+![xidown Interface](xidownv0.2516.png)
 
 ---
 
-## What's New (v0.2515 Optimization & Fixes)
+## What's New (v0.2516 Optimization & Fixes)
 
-- **Instant Startup & Portable Release:** Compiled as a portable directory instead of a single packed executable. This dramatically speeds up application launch to instantaneous, improves runtime stability, and ensures cleaner file organization.
-- **Instant Desktop Shortcut:** Automatically creates a beautiful desktop shortcut with the custom xidown icon on the very first run of the application—completely hands-free without needing any manual scripts.
-- **Perfect Setup Synchronization:** Fixed a race condition where the Setup Binaries download window would open off-screen or minimized. It now centers beautifully on top of the main window after the splash screen finishes loading.
-- **Flawless Audio Extraction & UI Styling:** Fixed a legacy emoji-check bug that caused the "Audio" toggle to still download video. Audio extraction now works perfectly, and the UI dynamically updates to a beautiful pink audio card layout.
+- **Square & Minimal Scrollbars:** Standardized all scrollbars across the application (Main Window, Notes Window, and Subtitles Popup) to be fully square and thin, delivering a highly consistent and clean flat aesthetic.
+- **Perfect Spacing & Layout Symmetry:** Standardized the spacing between all primary button groups and refined card margins to ensure perfect vertical and horizontal alignment.
+- **Symmetric Notes Interface:** Perfectly aligned the Note Editor's delete button with the right edge of the text box.
 
 ---
 

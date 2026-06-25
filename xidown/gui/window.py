@@ -118,7 +118,7 @@ class ThumbnailCard(ctk.CTkFrame):
     def __init__(self, parent, data_video, callback_delete_satu, callback_toggle=None, callback_reorder=None, callback_lock=None, callback_test=None, callback_download_satu=None):
         self.default_bg = "#1e1e1e"
         super().__init__(parent, fg_color=self.default_bg, corner_radius=0, border_width=1, border_color="#2c2c2c") 
-        self.pack(pady=4, padx=5, fill="x") 
+        self.pack(pady=(5, 0), padx=5, fill="x") 
         self.data = data_video 
         self.callback_delete = callback_delete_satu 
         self.callback_toggle = callback_toggle 
@@ -476,7 +476,8 @@ class BaseLayout(ctk.CTk):
         
         self.log_box = ctk.CTkTextbox(self.inner_kiri, height=100, fg_color="#1a1a1a", text_color="#00FF00", font=("Terminal", 10), corner_radius=0, border_width=1, border_color="#2c2c2c", scrollbar_button_color="#333333", scrollbar_button_hover_color="#db2777")
         self.log_box.pack(side="bottom", fill="x", pady=(0, 0)) 
-        try: self.log_box._scrollbar.configure(width=4)
+        try: 
+            self.log_box._y_scrollbar.configure(width=4, corner_radius=0)
         except: pass
 
         frame_btn = ctk.CTkFrame(self.inner_kiri, fg_color="transparent")
@@ -492,7 +493,8 @@ class BaseLayout(ctk.CTk):
 
         self.box_link = ctk.CTkTextbox(self.inner_kiri, font=("Consolas", 11), fg_color="#1a1a1a", text_color="#eeeeee", corner_radius=0, border_width=1, border_color="#2c2c2c", scrollbar_button_color="#333333", scrollbar_button_hover_color="#db2777")
         self.box_link.pack(side="top", fill="both", expand=True, pady=(5, 0))
-        try: self.box_link._scrollbar.configure(width=4)
+        try: 
+            self.box_link._y_scrollbar.configure(width=4, corner_radius=0)
         except: pass
 
     # ------------------------------------------------------------------------
@@ -524,29 +526,28 @@ class BaseLayout(ctk.CTk):
         self.var_semua = ctk.BooleanVar(value=False)
         self.var_subs = ctk.BooleanVar(value=False)
 
-        # Toggle "Select All" - True Square Style
+        # Toggle "Select All"
         self.btn_select_all = ctk.CTkButton(
             row2, text="Select All", width=70, height=24, corner_radius=0,
             font=("Terminal", 11, "bold"), fg_color="#1a1a1a", hover_color="#2b2b2b",
             text_color="#888888", border_width=1, border_color="#555555",
             command=self._update_switch_all
         )
-        self.btn_select_all.pack(side="left", padx=(10, 5), pady=0)
+        self.btn_select_all.pack(side="left", padx=(10, 4), pady=0)
 
-        # Toggle "Subs" - True Square Style
+        # Toggle "Subs"
         self.btn_subs = ctk.CTkButton(
             row2, text="Subs", width=50, height=24, corner_radius=0,
             font=("Terminal", 11, "bold"), fg_color="#1a1a1a", hover_color="#2b2b2b",
             text_color="#888888", border_width=1, border_color="#555555",
             command=self._update_switch_subs
         )
-        self.btn_subs.pack(side="left", padx=5, pady=0)
+        self.btn_subs.pack(side="left", padx=(4, 5), pady=0)
 
         self.var_format = ctk.StringVar(value="Video") 
         
-        # Video/Audio Toggle Buttons (like settings style)
         f_format = ctk.CTkFrame(row2, fg_color="transparent")
-        f_format.pack(side="right", padx=10)
+        f_format.pack(side="right", padx=0)
         
         self.btn_format_video = ctk.CTkButton(
             f_format, text="Video", width=70, height=28, corner_radius=0,
@@ -578,7 +579,7 @@ class BaseLayout(ctk.CTk):
         self.progress_bar.pack(side="bottom", fill="x", pady=0)
         
         self.btn_download = ctk.CTkButton(frame_dl, text="Download", width=120, height=32, font=("Terminal", 13), fg_color="#db2777", hover_color="#be185d", state="disabled", corner_radius=0)
-        self.btn_download.grid(row=0, column=1, sticky="s", padx=(0, 5), pady=0)
+        self.btn_download.grid(row=0, column=1, sticky="s", padx=(0, 8), pady=0)
         self.btn_clean_list = ctk.CTkButton(frame_dl, text="Clear", width=70, height=32, font=("Terminal", 13), fg_color="#2b2b2b", hover_color="#3a3a3a", corner_radius=0)
         self.btn_clean_list.grid(row=0, column=2, sticky="s", padx=(0, 0), pady=0)
 
@@ -591,7 +592,7 @@ class BaseLayout(ctk.CTk):
         self.scroll_frame.pack(side="top", fill="both", expand=True, padx=3, pady=3)
         try:
             if hasattr(self.scroll_frame, "_scrollbar"):
-                self.scroll_frame._scrollbar.configure(width=10)
+                self.scroll_frame._scrollbar.configure(width=4, corner_radius=0)
         except: pass
         
         # [CURTAIN]

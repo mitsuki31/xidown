@@ -40,7 +40,7 @@ class SubtitlePopup(ctk.CTkToplevel):
         # Checkbox list
         self.scroll_frame = ctk.CTkScrollableFrame(self, fg_color="#1a1a1a", border_width=1, border_color="#2c2c2c", corner_radius=0)
         self.scroll_frame.pack(fill="both", expand=True, padx=15, pady=(0, 10))
-        try: self.scroll_frame._scrollbar.configure(width=10)
+        try: self.scroll_frame._scrollbar.configure(width=10, corner_radius=0)
         except: pass
 
         self.checkboxes = {}

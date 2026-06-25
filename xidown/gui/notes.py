@@ -153,6 +153,10 @@ class NotesWindow(ctk.CTkToplevel):
             scrollbar_button_color="#333333", scrollbar_button_hover_color="#db2777"
         )
         self.scroll_list.pack(fill="both", expand=True, padx=2, pady=(0, 5))
+        try:
+            if hasattr(self.scroll_list, "_scrollbar"):
+                self.scroll_list._scrollbar.configure(width=4, corner_radius=0)
+        except: pass
 
         self.frame_editor = ctk.CTkFrame(self, corner_radius=0, fg_color="#121212")
         self.frame_editor.grid(row=0, column=1, sticky="nsew")
@@ -173,13 +177,16 @@ class NotesWindow(ctk.CTkToplevel):
             self.frame_header_top, text=text_del, image=ic_del, fg_color="#2b2b2b", hover_color="#8B0000", 
             text_color="#777777", font=("Terminal", 10, "bold"), width=28, height=28, corner_radius=0, command=self.action_delete_note
         )
-        self.btn_delete.pack(side="right", padx=5)
+        self.btn_delete.pack(side="right", padx=(5, 0))
 
         self.textbox_isi = ctk.CTkTextbox(
             self.frame_editor, font=("Consolas", 11), text_color="#eeeeee", 
             fg_color="#1a1a1a", border_width=1, border_color="#2c2c2c", corner_radius=0,
             scrollbar_button_color="#333333", scrollbar_button_hover_color="#db2777", undo=True
         )
+        try:
+            self.textbox_isi._y_scrollbar.configure(width=4, corner_radius=0)
+        except: pass
         self.textbox_isi.bind("<KeyRelease>", self.action_save_content)
 
         self.refresh_sidebar_list()
