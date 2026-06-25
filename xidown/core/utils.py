@@ -99,7 +99,7 @@ def get_rootdir(as_path: bool = False) -> PathLike:
     """
     base_path: Path
     if getattr(sys, 'frozen', False):
-        base_path = Path(sys.executable)
+        base_path = Path(sys.executable).parent
     else:
         # Current file location: .../xidown/xidown/core/utils.py
         base_path = Path(__file__).absolute().parent.parent.parent
