@@ -6,10 +6,11 @@ xidown is a powerful, cross-platform GUI-based video and audio downloader built 
 
 ---
 
-## What's New (v0.2516 Optimization & Fixes)
+## What's New
 
-- **Square & Minimal Scrollbars:** Standardized all scrollbars across the application (Main Window, Notes Window, and Subtitles Popup) to be fully square and thin, delivering a highly consistent and clean flat aesthetic.
-- **Perfect Spacing & Layout Symmetry:** Standardized the spacing between all primary button groups and refined card margins to ensure perfect vertical and horizontal alignment.
+- **Nuitka Compiled:** Switched from PyInstaller to Nuitka native compiler, producing real C-compiled binaries that significantly reduce false positive antivirus detections.
+- **Square & Minimal Scrollbars:** Standardized all scrollbars across the application to be fully square and thin, delivering a consistent flat aesthetic.
+- **Perfect Spacing & Layout Symmetry:** Standardized the spacing between all primary button groups and refined card margins to ensure perfect alignment.
 - **Symmetric Notes Interface:** Perfectly aligned the Note Editor's delete button with the right edge of the text box.
 
 ---
@@ -77,6 +78,21 @@ Download the pre-compiled package for your OS from the [Releases](https://github
    python -m xidown
    ```
 
+### Option 3: Build from Source
+xidown uses [Nuitka](https://nuitka.net/) to compile Python into native C binaries.
+
+**Requirements:**
+- Python 3.8+
+- C compiler: **MSVC** (Windows), **GCC** (Linux), or **Xcode CLT** (macOS)
+
+**Steps:**
+```bash
+pip install -e .
+pip install nuitka ordered-set
+python build.py
+```
+The compiled output will be in `dist/app.dist/` and a release `.zip` in `releases/`.
+
 ---
 
 ## Browser Extension Setup
@@ -100,6 +116,7 @@ xidown/
 │   ├── app.py           # Main application entry point & Flask Server
 │   ├── core/            # Download logic, scanning algorithms, and system utilities
 │   └── gui/             # CustomTkinter UI layouts, popups, and components
+├── build.py             # Nuitka build script for standalone compilation
 ├── pyproject.toml       # Python package configuration and dependencies
 └── README.md
 ```

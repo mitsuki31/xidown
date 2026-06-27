@@ -212,8 +212,9 @@ def get_icon_path() -> Optional[str]:
     str
         A string path refers to the image, or None if cannot be found.
     """
-    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        base_path = Path(sys._MEIPASS)
+    if getattr(sys, 'frozen', False):
+        # Nuitka standalone & PyInstaller onedir: assets are next to exe
+        base_path = Path(sys.executable).parent
     else:
         base_path = get_rootdir(True)
         

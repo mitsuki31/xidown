@@ -39,3 +39,9 @@ Thumbs.db
 build/
 dist/
 releases/
+*.spec
+
+# Nuitka build artifacts
+*.build/
+*.dist/
+*.onefile-build/
