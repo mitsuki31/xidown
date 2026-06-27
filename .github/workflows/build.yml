@@ -45,7 +45,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact-${{ matrix.os }}
-          path: releases/*.zip
+          path: releases/*
 
   release:
     name: Create Release and Upload Assets
@@ -61,7 +61,7 @@ jobs:
       - name: Organize Release Files
         run: |
           mkdir -p release-files
-          find downloaded-artifacts -name "*.zip" -exec cp {} release-files/ \;
+          find downloaded-artifacts -type f -exec cp {} release-files/ \;
           echo "Files to upload:"
           ls -lh release-files/
 
@@ -70,6 +70,6 @@ jobs:
         with:
           name: xidown ${{ github.ref_name }}
           generate_release_notes: true
-          files: release-files/*.zip
+          files: release-files/*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

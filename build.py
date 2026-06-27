@@ -180,6 +180,11 @@ def package_release(project_root):
         zip_directory(app_folder_path, zip_path)
         print(f"[Build] Packaged successfully to: {zip_path}")
         print(f"[Build] Package size: {os.path.getsize(zip_path) / (1024*1024):.2f} MB")
+        
+        # 4.5 Build Inno Setup installer if on Windows
+        if os_name == "windows":
+            build_inno_setup(app_folder_path, releases_dir, project_root, arch)
+            
     except Exception as e:
         print(f"[Build] Packaging failed: {e}")
         sys.exit(1)
@@ -190,6 +195,68 @@ def package_release(project_root):
                 shutil.rmtree(app_folder_path)
             except Exception as e:
                 print(f"[Build] Warning: Failed to clean up temporary release folder: {e}")
+
+def build_inno_setup(app_folder_path, releases_dir, project_root, arch):
+    try:
+        from xidown.core.version import APP_VER
+        version = APP_VER.replace("v.", "").replace("v", "")
+    except ImportError:
+        version = "0.0.0"
+        
+    iss_content = f"""
+[Setup]
+AppName=xidown
+AppVersion={version}
+AppPublisher=indravoyager
+DefaultDirName={{autopf}}\\xidown
+DefaultGroupName=xidown
+OutputDir={releases_dir}
+OutputBaseFilename=xidown-windows-{arch}-setup
+Compression=lzma2
+SolidCompression=yes
+SetupIconFile={app_folder_path}\\assets\\favicon.ico
+UninstallDisplayIcon={{app}}\\xidown.exe
+PrivilegesRequired=admin
+
+[Tasks]
+Name: "desktopicon"; Description: "{{cm:CreateDesktopIcon}}"; GroupDescription: "{{cm:AdditionalIcons}}"; Flags: unchecked
+
+[Files]
+Source: "{app_folder_path}\\*"; DestDir: "{{app}}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+[Icons]
+Name: "{{autoprograms}}\\xidown"; Filename: "{{app}}\\xidown.exe"
+Name: "{{autodesktop}}\\xidown"; Filename: "{{app}}\\xidown.exe"; Tasks: desktopicon
+
+[Run]
+Filename: "{{app}}\\xidown.exe"; Description: "{{cm:LaunchProgram,xidown}}"; Flags: nowait postinstall skipifsilent
+"""
+    iss_path = os.path.join(project_root, "xidown.iss")
+    with open(iss_path, "w", encoding="utf-8") as f:
+        f.write(iss_content)
+        
+    print(f"[Build] Created Inno Setup script at {iss_path}")
+    
+    # Check if ISCC is available (Windows only)
+    iscc_paths = [
+        r"C:\\Program Files (x86)\\Inno Setup 6\\ISCC.exe",
+        r"C:\\Program Files\\Inno Setup 6\\ISCC.exe"
+    ]
+    iscc_exe = None
+    for p in iscc_paths:
+        if os.path.exists(p):
+            iscc_exe = p
+            break
+            
+    if iscc_exe:
+        print("[Build] Found Inno Setup compiler. Compiling installer...")
+        try:
+            subprocess.check_call([iscc_exe, iss_path])
+            print("[Build] Installer compilation completed successfully!")
+        except subprocess.CalledProcessError as e:
+            print(f"[Build] Installer compilation failed: {e}")
+    else:
+        print("[Build] Inno Setup compiler not found. Skipping installer creation.")
 
 def zip_directory(folder_path, zip_path):
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
